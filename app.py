@@ -4,19 +4,20 @@ import google.generativeai as genai
 # 1. Page Configuration
 st.set_page_config(page_title="AI Customer Support Bot", page_icon="🤖", layout="centered")
 
-# 🤫 KHUFIA CSS CODE: Jo top ke saare options aur footer ko bilkul mita dega!
-hide_streamlit_style = """
+# 🤫 KHUFIA ANTI-SLEEP & HIDE TOOLBAR CSS/HTML CODE
+# Yeh code har 300 seconds (5 minute) baad page ko automatic fresh karega bahi!
+anti_sleep_and_hide = """
+            <meta http-equiv="refresh" content="300">
             <style>
-            /* Top bar/toolbar ko mitao */
             [data-testid="stToolbar"] {visibility: hidden !important;}
             footer {visibility: hidden !important;}
             header {visibility: hidden !important;}
             #MainMenu {visibility: hidden !important;}
             </style>
             """
-st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+st.markdown(anti_sleep_and_hide, unsafe_allow_html=True)
 
-# UptimeRobot Ping Handler (Bot Ko Zinda Rakhne Ke Liye)
+# UptimeRobot Ping Handler
 try:
     if "ping" in st.query_params:
         st.write("Jaag raha hoon bahi!")
