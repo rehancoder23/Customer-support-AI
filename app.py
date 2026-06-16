@@ -1,10 +1,22 @@
 import streamlit as st
-import google.generativeai as genai  # <-- Line 2: Real Gemini library import ki
+import google.generativeai as genai
 
 # 1. Page Configuration
 st.set_page_config(page_title="AI Customer Support Bot", page_icon="🤖", layout="centered")
 
-# UptimeRobot Ping Handler (Bot Ko 24 Ghante Zinda Rakhne Ke Liye)
+# 🤫 KHUFIA CSS CODE: Jo top ke saare options aur footer ko bilkul mita dega!
+hide_streamlit_style = """
+            <style>
+            /* Top bar/toolbar ko mitao */
+            [data-testid="stToolbar"] {visibility: hidden !important;}
+            footer {visibility: hidden !important;}
+            header {visibility: hidden !important;}
+            #MainMenu {visibility: hidden !important;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+# UptimeRobot Ping Handler (Bot Ko Zinda Rakhne Ke Liye)
 try:
     if "ping" in st.query_params:
         st.write("Jaag raha hoon bahi!")
@@ -12,12 +24,10 @@ try:
 except AttributeError:
     pass
 
-# 2. API Key Aur Model Configuration (Yahan Se Bot Active Hoga)
-# Streamlit Secrets se aapki Gemini API Key khud uthaye ga bahi
+# 2. API Key Aur Model Configuration
 try:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-    # Fiverr client ke liye best aur fast model
-    model = genai.GenerativeModel('gemini-3.5-flash') 
+    model = genai.GenerativeModel('gemini-3.5-flash')
 except Exception as e:
     st.error("Yaar API Key ka masla ha! Streamlit Secrets mein 'GEMINI_API_KEY' check karein bahi.")
 
@@ -58,11 +68,9 @@ if user_input := st.chat_input("Ask me anything about our services..."):
         st.write(user_input)
     st.session_state.messages.append({"role": "user", "content": user_input})
     
-    # Real Gemini Model Response Generation (Line 61 se 67)
     with st.chat_message("assistant"):
         with st.spinner("AI is thinking..."):
             try:
-                # Yeh line real model se jawab mangti hai bahi
                 response = model.generate_content(user_input)
                 ai_response = response.text
             except Exception as e:
